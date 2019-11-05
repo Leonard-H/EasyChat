@@ -1,0 +1,82 @@
+.container {
+  max-width: 600px;
+  max-height: 866px;
+}
+
+.btn {
+  background: #43d9be;
+  color: white;
+  box-shadow: none !important;
+}
+
+.btn:hover {
+  color: rgb(20, 20, 20) !important;
+}
+
+.chat-window {
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  -ms-overflow-style: none;  // IE 10+
+  scrollbar-width: none;  // Firefox
+}
+
+.chat-window::-webkit-scrollbar {
+  display: none;  // Safari and Chrome
+}
+
+.username {
+  font-weight: bold;
+}
+
+.time {
+  font-size: 0.7em;
+  color: #999;
+}
+
+.update-mssg {
+  font-size: 1.2em;
+  background-color: rgba(255, 255, 0, 0.4);
+  text-align: center;
+  margin: 20px auto;
+}
+
+/* arrow down */
+
+i.arrow {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+
+  position: relative;
+  top: -1.5px;
+}
+
+.go-to-recent {
+  background-color: #43d9be;
+  border: none;
+  outline: none !important;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  top: 200px;
+  left: 48%;
+}
+
+.settingsForm {
+  font-size: 1.4em;
+}
+
+.form-check.list-group-item {
+  padding: 25px 45px;
+}
+
+input[type="checkbox"] {
+  position: relative;
+  top: -0.63px;
+}
