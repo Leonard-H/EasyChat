@@ -60,9 +60,6 @@ class ChatUI {
     this.settingsDiv.classList.add("d-none");
   }
 
-}
-.list.innerHTML = "";
-  }
   btns(rooms, room){
     rooms.querySelectorAll("button").forEach(room => {
       room.style.color = "white";
