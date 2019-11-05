@@ -7,7 +7,6 @@ class Chatroom {
     this.room = room;
     this.username = username;
     this.chats = db.collection("chats");
-    this.unsub;
   }
 
   //adding new chat documents
@@ -27,13 +26,19 @@ class Chatroom {
 
   //setting up a real-time listener toget new chats
   async getChats(callback){
-    this.unsub = this.chats
+    let boolean = false;
+    this.chats
       .orderBy("created_at")
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach((change, index) => {
           if (change.type === "added"){
+
             //update UI
-            callback(change.doc.data());
+            callback(change.doc.data(), boolean, index);
+
+            //notification sound
+            boolean = true;
+
           }
         });
       });

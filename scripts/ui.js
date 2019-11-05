@@ -34,14 +34,6 @@ class ChatUI {
 
     this.list.innerHTML += html;
   }
-  //TODO: setup in app.js
-  notify(notification, username){
-    //audio stuff
-    if (data.username !== username){
-      notification.play()
-        .catch(err => console.log(err));
-    }
-  }
   render(room){
     Array.from(this.list.children).forEach(child => {
 

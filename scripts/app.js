@@ -109,17 +109,23 @@ chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
 
 const chatroom = new Chatroom(activeRoom, username);
 
+const notify = new Notify();
+
 //get chats and render
-chatroom.getChats(data => {
+chatroom.getChats((data, boolean, index) => {
   chatUI.setUp(data);
   chatUI.goToRecent();
   chatUI.render(chatroom.room);
-  //setup notification sound
-  const notify = (notification, username) => {
-    if (data.username !== username || true){
-      notification.play()
-        .catch(err => console.log(err));
-    }
+
+
+  //code checks if there is more than one message (aka startup) to prevent notification
+  let notSetupMessage = false;
+  if (boolean && !index){
+    notSetupMessage = true;
   }
+  console.log(notSetupMessage, boolean, index);
+
+  //setup notification sound
+  notify.setUp(notification, chatroom.username, notSetupMessage);
 })
   .catch(err => console.log(err));
