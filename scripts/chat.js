@@ -49,6 +49,8 @@ class Chatroom {
   }
   updateRoom(room){
     this.room = room;
-    localStorage.activeRoom = room;
+    if (this.room !== "settings"){
+      localStorage.activeRoom = room;
+    }
   }
 }

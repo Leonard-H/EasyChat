@@ -7,9 +7,6 @@ class ChatUI {
     this.list = list;
     this.settingsDiv = settingsDiv;
   }
-  clear(){
-    this.list.innerHTML = "";
-  }
   btns(rooms, room){
     rooms.querySelectorAll("button").forEach(room => {
       room.style.color = "white";
@@ -45,10 +42,16 @@ class ChatUI {
 
     });
   }
-  settings(){
+  setUpSettings(forms){
+    forms.newNameForm.classList.add("d-none");
+    forms.newChatForm.classList.add("d-none");
+    this.list.classList.add("d-none");
     this.settingsDiv.classList.remove("d-none");
   }
-  clearSettings(){
+  removeSettings(forms){
+    forms.newNameForm.classList.remove("d-none");
+    forms.newChatForm.classList.remove("d-none");
+    this.list.classList.remove("d-none");
     this.settingsDiv.classList.add("d-none");
   }
 

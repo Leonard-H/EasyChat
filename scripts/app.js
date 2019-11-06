@@ -9,6 +9,7 @@ const chatList = document.querySelector(".chat-list");
 const settingsDiv = document.querySelector("form.settingsForm");
 const newChatForm = document.querySelector(".new-chat");
 const newNameForm = document.querySelector(".new-name");
+const forms = { newChatForm, newNameForm };
 const updateMssg = document.querySelector(".update-mssg");
 const rooms = document.querySelector(".chat-rooms");
 const chatWindow = document.querySelector(".chat-window");
@@ -49,23 +50,17 @@ rooms.addEventListener("click", e => {
 
     //settings
     if (e.target.getAttribute("id") === "settings"){
-      newNameForm.classList.add("d-none")
-      newChatForm.classList.add("d-none")
-      if (!goToRecent.classList.contains("d-none")){
-        goToRecent.classList.add("d-none");
-      }
+
+      goToRecent.classList.add("d-none");
       chatroom.updateRoom(e.target.getAttribute("id"));
-      chatUI.settings();
+      chatUI.setUpSettings(forms);
 
     } else if (chatroom.room === "settings"){
-      newNameForm.classList.remove("d-none");
-      newChatForm.classList.remove("d-none");
-      chatUI.clearSettings();
+
+      chatUI.removeSettings(forms);
       chatroom.updateRoom(e.target.getAttribute("id"));
       chatUI.render(chatroom.room);
-      if (!goToRecent.chatList.contains("d-none")){
-        goToRecent.classList.add("d-none")
-      }
+      goToRecent.classList.add("d-none")
       chatUI.goToRecent();
 
     } else {
@@ -123,7 +118,6 @@ chatroom.getChats((data, boolean, index) => {
   if (boolean && !index){
     notSetupMessage = true;
   }
-  console.log(notSetupMessage, boolean, index);
 
   //setup notification sound
   notify.setUp(notification, chatroom.username, notSetupMessage);
