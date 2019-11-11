@@ -15,6 +15,8 @@ const rooms = document.querySelector(".chat-rooms");
 const chatWindow = document.querySelector(".chat-window");
 const goToRecent = document.querySelector(".go-to-recent");
 const notification = document.querySelector("audio.notification-sound");
+const loginBtn = document.querySelector(".login");
+const signupBtn = document.querySelector(".signup");
 
 //add a new chat
 newChatForm.addEventListener("submit", e => {
@@ -97,6 +99,8 @@ chatWindow.addEventListener("scroll", () => {
 
 
 //class instances
+const templates = new Templates();
+
 const chatUI = new ChatUI(chatList, settingsDiv);
 
 const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";

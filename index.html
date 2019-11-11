@@ -16,9 +16,18 @@
     <source  src="sounds/234524__foolboymedia__notification-up-1.wav" type="audio/wav" />
   </audio>
 
+
+
   <!-- container & title -->
   <div class="container my-4">
     <h1 class="my-4 text-center">Chat (Beta)</h1>
+
+
+    <!-- login / signup -->
+    <div class="start text-center">
+      <button class="login btn">login</button>
+      <button class="signup btn">sign up</button>
+    </div>
 
     <!-- buttons for chatroom -->
     <div class="chat-rooms mb-3 text-center">
@@ -86,6 +95,7 @@
   <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
   <!-- firebase -->
   <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-firestore.js"></script>
 
   <script>
@@ -101,6 +111,7 @@
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
   </script>
 
@@ -110,6 +121,7 @@
   <script src="scripts/theme.js"></script>
   <script src="scripts/chat.js"></script>
   <script src="scripts/ui.js"></script>
+  <script src="scripts/auth.js"></script>
   <script src="scripts/notify.js"></script>
   <script src="scripts/app.js"></script>
 </body>
