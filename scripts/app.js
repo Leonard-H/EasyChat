@@ -5,6 +5,7 @@
 
 
 //dom query
+const main = document.querySelector(".main");
 const chatList = document.querySelector(".chat-list");
 const settingsDiv = document.querySelector("form.settingsForm");
 const newChatForm = document.querySelector(".new-chat");
@@ -17,6 +18,7 @@ const goToRecent = document.querySelector(".go-to-recent");
 const notification = document.querySelector("audio.notification-sound");
 const loginBtn = document.querySelector(".login");
 const signupBtn = document.querySelector(".signup");
+const authForm = document.querySelector(".auth-form");
 
 //add a new chat
 newChatForm.addEventListener("submit", e => {
@@ -103,6 +105,12 @@ const templates = new Templates();
 
 const chatUI = new ChatUI(chatList, settingsDiv);
 
+const authentication = new Authentication(document.querySelector(".start"),
+                                          main,
+                                          document.querySelector(".logout-btn"),
+                                          document.querySelector(".logout-text")
+                                          );
+
 const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";
 chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
 
@@ -127,3 +135,15 @@ chatroom.getChats((data, boolean, index) => {
   notify.setUp(notification, chatroom.username, notSetupMessage);
 })
   .catch(err => console.log(err));
+
+
+
+
+//auth
+signupBtn.addEventListener("click", () => {
+  authentication.signup(authForm);
+})
+
+loginBtn.addEventListener("click", () => {
+  authentication.login(authForm)
+});

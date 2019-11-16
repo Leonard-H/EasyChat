@@ -80,3 +80,9 @@ input[type="checkbox"] {
   position: relative;
   top: -0.63px;
 }
+
+/* styles that aren't in darkTheme yet*/
+.tutorial {
+  margin;
+  font-size: 0.7em;
+}

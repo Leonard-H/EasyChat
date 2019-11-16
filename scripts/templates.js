@@ -82,9 +82,9 @@ class Templates {
                 text-align: center;
                 font-size: 1.5em;
 
-                height: 180px;
+                height: 300px;
                 width: 95%;
-                max-width: 360px;
+                max-width: 380px;
 
                 margin: 10% auto;
                 padding: 30px;
@@ -108,7 +108,7 @@ class Templates {
             #regex {
                 color: red;
                 font-size: 0.65em;
-                width: 355px;
+                max-width: 355px;
                 position: fixed;
             }
 
