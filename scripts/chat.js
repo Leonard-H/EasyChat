@@ -43,9 +43,11 @@ class Chatroom {
         });
       });
   }
-  updateName(username){
+  updateName(username, user){
     this.username = username;
-    localStorage.username = username;
+    user.update({
+      username: username
+    })
   }
   updateRoom(room){
     this.room = room;

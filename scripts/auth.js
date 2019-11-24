@@ -5,6 +5,7 @@ class Authentication {
     this.main = main;
     this.logoutBtn = logoutBtn;
     this.logoutText = logoutText;
+    this.user;
   }
   toggleChat(boolean){
     if (boolean){
@@ -98,6 +99,13 @@ class Authentication {
 
       //sign up the user
       auth.createUserWithEmailAndPassword(email, password)
+        .then(cred => {
+          console.log("something");
+          db.collection("users").doc(cred.user.uid).set({
+            username: null
+          })
+          .catch(err => console.log(err))
+        })
         .catch(err => {
           this.div.innerHTML = err;
         });
@@ -118,11 +126,18 @@ class Authentication {
     auth.onAuthStateChanged(user => {
       if (user){
         this.toggleChat(true);
-        callback();
-        this.logout();
+
+      //get reference to user
+      this.user = db.collection("users").doc(user.uid);
+
+      callback(user);
+      this.logout();
+
+
       } else {
         this.toggleChat(false);
         this.div.innerHTML = "";
+        this.user = undefined;
       }
     });
   }

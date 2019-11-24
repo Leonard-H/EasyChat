@@ -17,6 +17,7 @@ const notification = document.querySelector("audio.notification-sound");
 const loginBtn = document.querySelector(".login");
 const signupBtn = document.querySelector(".signup");
 const authForm = document.querySelector(".auth-form");
+const accountDetails = document.querySelector(".account-details");
 
 //add a new chat
 newChatForm.addEventListener("submit", e => {
@@ -34,9 +35,12 @@ newChatForm.addEventListener("submit", e => {
 //update username
 newNameForm.addEventListener("submit", e => {
   e.preventDefault();
-  //update name via the chatroom class
+  //update name via the chatroom classq
   const newName = newNameForm.name.value.trim();
-  chatroom.updateName(newName);
+  username = newName;
+  chatroom.updateName(newName, authentication.user);
+
+
   //reset the form
   newNameForm.reset();
   //show then hide the update message
@@ -76,9 +80,6 @@ rooms.addEventListener("click", e => {
   }
 });
 
-//chack local storage for a name
-const username = localStorage.username ? localStorage.username : undefined;
-
 //go to recent
 chatWindow.addEventListener("scroll", () => {
   if (chatList.children[chatList.childElementCount - 1]){
@@ -98,6 +99,15 @@ chatWindow.addEventListener("scroll", () => {
 });
 
 
+const updateUsername = () => {
+  //get username from database
+  authentication.user.get().then(doc => {
+    username = doc.data().username;
+    chatroom.username = username;
+  })
+}
+
+
 //class instances
 const templates = new Templates();
 
@@ -110,27 +120,9 @@ const authentication = new Authentication(document.querySelector(".start"),
                                           document.querySelector(".logout-text"),
                                           );
 
+let username;
 
-const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";
-chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
-
-const chatroom = new Chatroom(activeRoom, username);
-
-const notify = new Notify();
-
-
-//auth
-signupBtn.addEventListener("click", () => {
-  authentication.signup();
-})
-
-loginBtn.addEventListener("click", () => {
-  authentication.login()
-});
-
-settingsDiv.addEventListener("submit", e => e.preventDefault());
-
-authentication.listener(() => {
+authentication.listener(user => {
   //get chats and render
   chatroom.getChats((data, boolean, index) => {
     chatUI.setUp(data);
@@ -148,4 +140,62 @@ authentication.listener(() => {
     notify.setUp(notification, chatroom.username, notSetupMessage);
   })
     .catch(err => console.log(err));
+
+  //account info
+  const html = `
+    <small class="text-muted">logged in as: ${user.email}</small>
+  `;
+  accountDetails.innerHTML = html;
+  updateUsername();
+
 });
+
+// TODO: let activeroom run over database
+
+const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";
+chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
+
+const chatroom = new Chatroom(activeRoom, username);
+
+const notify = new Notify();
+
+
+//auth
+signupBtn.addEventListener("click", () => {
+  authentication.signup();
+  updateUsername();
+})
+
+loginBtn.addEventListener("click", () => {
+  authentication.login()
+  updateUsername();
+});
+
+settingsDiv.addEventListener("submit", e => e.preventDefault());
+
+
+
+
+
+
+
+
+
+//developer tool: delete tests
+const deleteTests = () => {
+let tests = [];
+
+db.collection("chats").where("message", "==", "test")
+	.get()
+	.then((querySnapshot) => {
+		tests = querySnapshot.docs;
+	})
+
+tests.forEach((test, index) => {
+	tests[index] = test.id;
+})
+
+tests.forEach(test => {
+	db.collection("chats").doc(test).delete()
+});
+}
