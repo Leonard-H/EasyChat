@@ -1,13 +1,11 @@
-// //temporary display check
-// if (innerWidth < 600 || innerHeight < 866){
-//   document.querySelector(".container").innerText = "Sorry, this app is not avalable for your device yet...";
-// }
-
+if (navigator.platform === "Android" || navigator.platform === "iPod" || navigator.platform === "iPhone"){
+  document.write("Your device isn't supported by this program");
+}
 
 //dom query
 const main = document.querySelector(".main");
 const chatList = document.querySelector(".chat-list");
-const settingsDiv = document.querySelector("form.settingsForm");
+const settingsDiv = document.querySelector("form.settings-form");
 const newChatForm = document.querySelector(".new-chat");
 const newNameForm = document.querySelector(".new-name");
 const forms = { newChatForm, newNameForm };
@@ -106,10 +104,12 @@ const templates = new Templates();
 const chatUI = new ChatUI(chatList, settingsDiv);
 
 const authentication = new Authentication(document.querySelector(".start"),
+                                          authForm,
                                           main,
                                           document.querySelector(".logout-btn"),
-                                          document.querySelector(".logout-text")
+                                          document.querySelector(".logout-text"),
                                           );
+
 
 const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";
 chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
@@ -118,32 +118,34 @@ const chatroom = new Chatroom(activeRoom, username);
 
 const notify = new Notify();
 
-//get chats and render
-chatroom.getChats((data, boolean, index) => {
-  chatUI.setUp(data);
-  chatUI.goToRecent();
-  chatUI.render(chatroom.room);
-
-
-  //code checks if there is more than one message (aka startup) to prevent notification
-  let notSetupMessage = false;
-  if (boolean && !index){
-    notSetupMessage = true;
-  }
-
-  //setup notification sound
-  notify.setUp(notification, chatroom.username, notSetupMessage);
-})
-  .catch(err => console.log(err));
-
-
-
 
 //auth
 signupBtn.addEventListener("click", () => {
-  authentication.signup(authForm);
+  authentication.signup();
 })
 
 loginBtn.addEventListener("click", () => {
-  authentication.login(authForm)
+  authentication.login()
+});
+
+settingsDiv.addEventListener("submit", e => e.preventDefault());
+
+authentication.listener(() => {
+  //get chats and render
+  chatroom.getChats((data, boolean, index) => {
+    chatUI.setUp(data);
+    chatUI.goToRecent();
+    chatUI.render(chatroom.room);
+
+
+    //code checks if there is more than one message (aka startup) to prevent notification
+    let notSetupMessage = false;
+    if (boolean && !index){
+      notSetupMessage = true;
+    }
+
+    //setup notification sound
+    notify.setUp(notification, chatroom.username, notSetupMessage);
+  })
+    .catch(err => console.log(err));
 });

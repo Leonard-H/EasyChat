@@ -1,24 +1,24 @@
 class Authentication {
-  constructor(start, main, logoutBtn, logoutText){
+  constructor(start, div, main, logoutBtn, logoutText){
     this.start = start;
+    this.div = div;
     this.main = main;
     this.logoutBtn = logoutBtn;
     this.logoutText = logoutText;
   }
-  toggleChat(){
-    if (!this.start.classList.contains("d-none")){
+  toggleChat(boolean){
+    if (boolean){
       this.start.classList.add("d-none");
-    } else {
-      this.start.classList.remove("d-none");
-    }
-    if (this.start.classList.contains("d-none")){
+      this.div.classList.add("d-none");
       this.main.classList.remove("d-none");
     } else {
+      this.start.classList.remove("d-none");
+      this.div.classList.remove("d-none");
       this.main.classList.add("d-none");
     }
 
   }
-  login(div){
+  login(){
     const html = `
       <form class="login-form">
         <div class="form-group">
@@ -33,23 +33,30 @@ class Authentication {
       </form>
     `;
 
-    div.innerHTML = html;
+    this.div.innerHTML = html;
 
     const loginForm = document.querySelector(".login-form");
+    loginForm.inputEmail.focus();
 
     loginForm.addEventListener("submit", e => {
       e.preventDefault();
 
 
       //get user info
-      const userInfo = {
-        email: loginForm.inputEmail,
-        password: loginform.inputPassword
-      };
+      const email = loginForm.inputEmail.value;
+      const password = loginForm.inputPassword.value;
+
+      //loginForm.classList.add("d-none");
+
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(err => {
+          this.div.innerHTML = err;
+        });
+
     })
 
   }
-  signup(div){
+  signup(){
     const html = `
     <form class="signup-form">
       <div class="form-group">
@@ -69,9 +76,10 @@ class Authentication {
     </form>
     `;
 
-    div.innerHTML = html;
+    this.div.innerHTML = html;
 
     const signupForm = document.querySelector(".signup-form");
+    signupForm.inputEmail.focus();
 
     signupForm.addEventListener("submit", e => {
       e.preventDefault();
@@ -81,21 +89,18 @@ class Authentication {
 
       const email = signupForm.inputEmail.value;
       let password;
+
+      //signupForm.classList.add("d-none");
+
       if (signupForm.inputPassword.value === signupForm.confirmPassword.value){
         password = signupForm.inputPassword.value;
       }
 
       //sign up the user
       auth.createUserWithEmailAndPassword(email, password)
-        .then(cred => {
-          console.log(cred.user);
-          signupForm.innerHTML = "";
-          this.toggleChat();
-          this.logout()
-        }).catch(err => {
-          div.innerHTML = err;
+        .catch(err => {
+          this.div.innerHTML = err;
         });
-
 
 
     })
@@ -104,12 +109,21 @@ class Authentication {
     this.logoutBtn.addEventListener("click", e => {
       e.preventDefault();
       if (this.logoutText.value === "logout"){
-
-        auth.signOut();
-
+        auth.signOut()
       }
+
     })
   }
-
-
+  listener(callback){
+    auth.onAuthStateChanged(user => {
+      if (user){
+        this.toggleChat(true);
+        callback();
+        this.logout();
+      } else {
+        this.toggleChat(false);
+        this.div.innerHTML = "";
+      }
+    });
+  }
 }
