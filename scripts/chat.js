@@ -3,9 +3,9 @@
 //updating the rooms
 
 class Chatroom {
-  constructor(room, username){
-    this.room = room;
-    this.username = username;
+  constructor(){
+    this.room;
+    this.username;
     this.chats = db.collection("chats");
   }
 
@@ -45,15 +45,8 @@ class Chatroom {
   }
   updateName(username, user){
     this.username = username;
-    //stores username in database
-    user.update({
-      username: username
-    })
   }
   updateRoom(room){
     this.room = room;
-    if (this.room !== "settings"){
-      localStorage.activeRoom = room;
-    }
   }
 }

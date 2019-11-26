@@ -100,9 +100,9 @@ class Authentication {
       //sign up the user
       auth.createUserWithEmailAndPassword(email, password)
         .then(cred => {
-          console.log("something");
           db.collection("users").doc(cred.user.uid).set({
-            username: null
+            username: null,
+            room: null
           })
           .catch(err => console.log(err))
         })
@@ -143,5 +143,4 @@ class Authentication {
       }
     });
   }
-  
 }

@@ -22,7 +22,7 @@ const accountDetails = document.querySelector(".account-details");
 //add a new chat
 newChatForm.addEventListener("submit", e => {
   e.preventDefault();
-  if (!username){
+  if (!chatroom.username){
     alert("First get yourself a username.");
   } else {
     const messege = newChatForm.message.value.trim();
@@ -98,16 +98,6 @@ chatWindow.addEventListener("scroll", () => {
   }
 });
 
-//method that
-const updateUsername = () => {
-  //get username from database
-  authentication.user.get().then(doc => {
-    username = doc.data().username;
-    chatroom.username = username;
-  })
-}
-
-
 //class instances
 const templates = new Templates();
 
@@ -120,9 +110,17 @@ const authentication = new Authentication(document.querySelector(".start"),
                                           document.querySelector(".logout-text"),
                                           );
 
-let username;
-
 authentication.listener(user => {
+  //get username from database
+  authentication.user
+    .get()
+    .then(user => {
+      const data = user.data();
+      chatroom.username = data.username;
+      chatroom.room =  data.room;
+      chatUI.btns(rooms, document.querySelector(`#${data.room}`));
+    });
+
   //get chats and render
   chatroom.getChats((data, boolean, index) => {
     chatUI.setUp(data);
@@ -147,22 +145,12 @@ authentication.listener(user => {
   `;
   accountDetails.innerHTML = html;
 
-  //get username from database
-  authentication.user.get().then(doc => {
-    username = doc.data().username;
-    chatroom.username = username;
-  })
-
 });
 
-// TODO: let activeroom run over database
-
-const activeRoom = localStorage.activeRoom ? localStorage.activeRoom : "general";
-chatUI.btns(rooms, document.querySelector(`#${activeRoom}`));
-
-const chatroom = new Chatroom(activeRoom, username);
+const chatroom = new Chatroom();
 
 const notify = new Notify();
+
 
 
 //auth
@@ -178,9 +166,14 @@ settingsDiv.addEventListener("submit", e => e.preventDefault());
 
 
 
-
-
-
+//store data such as username in firebase
+window.onbeforeunload = event => {
+  authentication.user
+    .update({
+      username: chatroom.username,
+      room: chatroom.room
+    });
+};
 
 
 
@@ -194,5 +187,5 @@ db.collection("chats").where("message", "==", "test")
       db.collection("chats").doc(test.id).delete();
 		});
 	})
-  
+
 }
