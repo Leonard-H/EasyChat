@@ -98,7 +98,7 @@ chatWindow.addEventListener("scroll", () => {
   }
 });
 
-
+//method that
 const updateUsername = () => {
   //get username from database
   authentication.user.get().then(doc => {
@@ -146,7 +146,12 @@ authentication.listener(user => {
     <small class="text-muted">logged in as: ${user.email}</small>
   `;
   accountDetails.innerHTML = html;
-  updateUsername();
+
+  //get username from database
+  authentication.user.get().then(doc => {
+    username = doc.data().username;
+    chatroom.username = username;
+  })
 
 });
 
@@ -162,13 +167,11 @@ const notify = new Notify();
 
 //auth
 signupBtn.addEventListener("click", () => {
-  authentication.signup();
-  updateUsername();
+  authentication.signup()
 })
 
 loginBtn.addEventListener("click", () => {
   authentication.login()
-  updateUsername();
 });
 
 settingsDiv.addEventListener("submit", e => e.preventDefault());
@@ -183,19 +186,13 @@ settingsDiv.addEventListener("submit", e => e.preventDefault());
 
 //developer tool: delete tests
 const deleteTests = () => {
-let tests = [];
 
 db.collection("chats").where("message", "==", "test")
 	.get()
 	.then((querySnapshot) => {
-		tests = querySnapshot.docs;
+		querySnapshot.forEach(test => {
+      db.collection("chats").doc(test.id).delete();
+		});
 	})
-
-tests.forEach((test, index) => {
-	tests[index] = test.id;
-})
-
-tests.forEach(test => {
-	db.collection("chats").doc(test).delete()
-});
+  
 }

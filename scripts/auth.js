@@ -19,7 +19,7 @@ class Authentication {
     }
 
   }
-  login(){
+  async login(){
     const html = `
       <form class="login-form">
         <div class="form-group">
@@ -57,7 +57,7 @@ class Authentication {
     })
 
   }
-  signup(){
+  async signup(){
     const html = `
     <form class="signup-form">
       <div class="form-group">
@@ -131,6 +131,8 @@ class Authentication {
       this.user = db.collection("users").doc(user.uid);
 
       callback(user);
+
+      //method that enables logout function
       this.logout();
 
 
@@ -141,4 +143,5 @@ class Authentication {
       }
     });
   }
+  
 }

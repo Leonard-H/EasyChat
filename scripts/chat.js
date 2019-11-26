@@ -45,6 +45,7 @@ class Chatroom {
   }
   updateName(username, user){
     this.username = username;
+    //stores username in database
     user.update({
       username: username
     })
