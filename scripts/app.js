@@ -1,6 +1,6 @@
-if (navigator.platform === "Android" || navigator.platform === "iPod" || navigator.platform === "iPhone"){
-  document.write("Your device isn't supported by this program");
-}
+// if (navigator.platform === "Android" || navigator.platform === "iPod" || navigator.platform === "iPhone"){
+//   document.write("Your device isn't supported by this program");
+// }
 
 //dom query
 const main = document.querySelector(".main");

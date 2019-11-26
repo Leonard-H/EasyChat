@@ -117,6 +117,7 @@ class Authentication {
     this.logoutBtn.addEventListener("click", e => {
       e.preventDefault();
       if (this.logoutText.value === "logout"){
+
         auth.signOut()
       }
 
